@@ -1,4 +1,3 @@
-from __future__ import division
 
 
 def mrr(out, th):
@@ -12,7 +11,7 @@ def mrr(out, th):
   MRR = 0.0
   for qid in out:
     candidates = out[qid]
-    for i in xrange(min(th, len(candidates))):
+    for i in range(min(th, len(candidates))):
       if candidates[i] == "true":
         MRR += 1.0 / (i + 1)
         break
@@ -26,12 +25,12 @@ def precision(out, th):
     candidates = out[qid]
     if all(x == "false" for x in candidates):
       continue
-    for i in xrange(min(th, len(candidates))):
+    for i in range(min(th, len(candidates))):
       if candidates[i] == "true":
         precisions[i] += 1.0
         break
     n += 1
-  for i in xrange(1, th):
+  for i in range(1, th):
     precisions[i] += precisions[i-1]  
 
   return [p*100/n for p in precisions]
@@ -43,11 +42,11 @@ def recall_of_1(out, th):
     candidates = out[qid]
     if all(x == "false" for x in candidates):
       continue
-    for i in xrange(min(th, len(candidates))):
+    for i in range(min(th, len(candidates))):
       if candidates[i] == "true":
         precisions[i] += 1.0
         break
-  for i in xrange(1, th):
+  for i in range(1, th):
     precisions[i] += precisions[i-1]  
 
   return [p*100/len(out) for p in precisions]
@@ -63,7 +62,7 @@ def map(out, th):
     avg_prec = 0
     precisions = []
     num_correct = 0
-    for i in xrange(min(th, len(candidates))):
+    for i in range(min(th, len(candidates))):
       if candidates[i] == "true":
         num_correct += 1
         precisions.append(num_correct/(i+1))
@@ -83,10 +82,10 @@ def accuracy(out, th):
   acc = [0.0]*th
   for qid in out:
     candidates = out[qid]
-    for i in xrange(min(th, len(candidates))):
+    for i in range(min(th, len(candidates))):
       if candidates[i] == "true":
         acc[i] += 1.0
-  for i in xrange(1, th):
+  for i in range(1, th):
     acc[i] += acc[i-1]  
   
   return [a*100/(i*len(out)) for i, a in enumerate(acc, 1)]
@@ -104,12 +103,12 @@ def accuracy1(out, th):
     relevant = out[qid]
     num_relevant = sum([1.0 for x in relevant if x == "true"])
     # print num_relevant
-    for i in xrange(min(th, len(relevant))):
+    for i in range(min(th, len(relevant))):
       if relevant[i] == "true":
         acc[i] += 1.0   
-    for i in xrange(th):
+    for i in range(th):
       maxrel[i] += min(i+1, num_relevant)
-  for i in xrange(1, th):
+  for i in range(1, th):
     acc[i] += acc[i-1]  
   return [a/numrel for a, numrel in zip(acc, maxrel)]
 
@@ -123,9 +122,9 @@ def accuracy2(out, th):
   acc = [0.0]*th
   for qid in out:
     relevant = out[qid]
-    for i in xrange(min(th, len(relevant))):
+    for i in range(min(th, len(relevant))):
       if relevant[i] == "true":
         acc[i] += 1.0
-  for i in xrange(1, th):
+  for i in range(1, th):
     acc[i] += acc[i-1]  
   return [a for i, a in enumerate(acc, 1)]

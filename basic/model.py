@@ -405,7 +405,7 @@ class Model(object):
             feed_dict[self.y0] = y0
 
             for i, (xi, cxi, yi) in enumerate(zip(X, CX, batch.data['y'])):
-                if config.data_dir.startswith('data/semeval'):
+                if 'semeval' in config.data_dir:
                     if yi==0: y0[i, 0, 1] = 1
                     elif yi==2: y0[i, 0, 0] = 1
                     else:

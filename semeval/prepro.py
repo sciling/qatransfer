@@ -14,6 +14,7 @@ from IPython import embed
 from squad.utils import get_word_span, get_word_idx, process_tokens
 
 def main():
+    nltk.download('punkt')
     args = get_args()
     prepro(args)
 
@@ -111,12 +112,12 @@ def prepro_each(args, data_type):
                         else 'v3.2/%s'%(data_type)
     fileName = 'SemEval2016-Task3-CQA-QL-%s-subtaskA.xml'
     if data_type=='train':
-        with open(os.path.join(args.source_dir, sub_dir, fileName%('train-part1'))) as f:
+        with open(os.path.join(args.source_dir, sub_dir, fileName%('train-part1')), encoding="utf-8") as f:
             data_list += xmltodict.parse(f.read())['xml']['Thread']
-        with open(os.path.join(args.source_dir, sub_dir, fileName%('train-part2'))) as f:
+        with open(os.path.join(args.source_dir, sub_dir, fileName%('train-part2')), encoding="utf-8") as f:
             data_list += xmltodict.parse(f.read())['xml']['Thread']
     else:
-        with open(os.path.join(args.source_dir, sub_dir, fileName%(data_type))) as f:
+        with open(os.path.join(args.source_dir, sub_dir, fileName%(data_type)), encoding="utf-8") as f:
             data_list += xmltodict.parse(f.read())['xml']['Thread']
     questions, comments, answers, question_ids, answer_ids = [], [], [], [], []
     

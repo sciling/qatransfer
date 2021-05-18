@@ -82,7 +82,7 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
     word_tokenize, sent_tokenize = get_sent_tokenize()
 
     source_data = []
-    f = open(os.path.join(args.source_dir, 'WikiQA-%s.txt' % data_type), 'r')
+    f = open(os.path.join(args.source_dir, 'WikiQA-%s.txt' % data_type), 'r', encoding='utf-8')
     curr_question = None
     lines = (f.read()).rsplit('\n')
     for i, line in enumerate(lines):
@@ -108,7 +108,7 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
         if correct == '1':
             answer_list.append(sentence)
 
-    json.dump({'data' : source_data}, open(os.path.join(args.source_dir, '%s.json' % data_type, 'w'))
+    json.dump({'data' : source_data}, open(os.path.join(args.source_dir, '%s.json' % data_type), 'w'))
 
     q, cq, y, rx, rcx, ids, idxs = [], [], [], [], [], [], []
     cy = []

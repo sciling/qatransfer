@@ -21,7 +21,7 @@ def read_res_file(res_fname, format):
 		ir[qid].append( (relevant, ir_score) )
 	
 	# Sort based on the search engine score (largest to smallest).
-	for qid, resList in ir.iteritems():
+        for qid, resList in list(ir.items()):
 		ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
 	return ir
 
@@ -42,19 +42,19 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 		qid, aid, relevant, ir_score = lineReader.read_line(line_res)
 		pred_qid, pred_aid, pred_relevant, pred_score = lineReader_pred.read_line(line_pred)
 		if (qid != pred_qid) or (aid != pred_aid):
-			print 'ERROR: ID mismatch on line ' + str(lineNo) + ':'
-			print 'in ' + res_fname + ' we have (' + qid + ',' + aid + '),'
-			print 'but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'
+                        print(('ERROR: ID mismatch on line ' + str(lineNo) + ':'))
+                        print(('in ' + res_fname + ' we have (' + qid + ',' + aid + '),'))
+                        print(('but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'))
 			quit()
 
 		if (relevant != 'true') and (relevant != 'false'):
-			print 'ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'
-			print 'Allowed values are only "true" and "false"'
+                        print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'))
+                        print('Allowed values are only "true" and "false"')
 			quit()
 
 		if (pred_relevant != 'true') and (pred_relevant != 'false'):
-			print 'ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'
-			print 'Allowed values are only "true" and "false"'
+                        print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'))
+                        print('Allowed values are only "true" and "false"')
 			quit()
 
 		ir[qid].append( (relevant, ir_score, aid) )
@@ -67,7 +67,7 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 
 	# Remove questions that contain no correct answer
 	if ignore_noanswer:
-		for qid in ir.keys():
+                for qid in list(ir.keys()):
 			candidates = ir[qid]
 			if all(relevant == "false" for relevant,_,_ in candidates):
 				del ir[qid]
@@ -108,7 +108,7 @@ def find_correct_answer_position(candidates):
 
 def analyze_reranking_improvement(before, after):
 	out = {}
-	for key, rank_before in before.iteritems():
+        for key, rank_before in list(before.items()):
 		rank_after = after[key]
 		improvement = rank_before - rank_after
 		out[key] = improvement
@@ -181,21 +181,21 @@ def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred",
 	#print "MAP   : %5.4f %5.4f" %(map_se, map_svm)
 	#print "AvgRec: %5.4f %5.4f" %(avg_acc1_ir, avg_acc1_svm)
 	#print "MRR   : %6.2f %6.2f" %(mrr_se, mrr_svm)
-	print "MAP   : %5.4f\tMRR   : %5.4f\tAvgRec: %5.4f" %(map_svm, mrr_svm, avg_acc1_svm)
+        print(("MAP   : %5.4f\tMRR   : %5.4f\tAvgRec: %5.4f" %(map_svm, mrr_svm, avg_acc1_svm)))
 	#print "Acc   : %5.4f" %(acc)
 	#print "P     : %5.4f" %(p)
 	#print "R     : %5.4f" %(r)
 	#print "F1    : %5.4f" %(f1)
-        """
-	print "%16s %6s  %14s %6s  %14s %6s  %12s %4s" % ("IR", "SYS", "IR", "SYS", "IR", "SYS", "IR", "SYS")
-	for i, (p_se, p_svm, a_se, a_svm, a_se1, a_svm1, a_se2, a_svm2) in enumerate(zip(prec_se, prec_svm, acc_se, acc_svm, acc_se1, acc_svm1, acc_se2, acc_svm2), 1):
-		print "REC-1@%02d: %6.2f %6.2f  ACC@%02d: %6.2f %6.2f  AC1@%02d: %6.2f %6.2f  AC2@%02d: %4.0f %4.0f" %(i, p_se, p_svm, i, a_se, a_svm, i, a_se1, a_svm1, i, a_se2, a_svm2)
-	print
-	print "REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks where questions have at most one correct answer)"
-	print "ACC   - accuracy, i.e., number of correct answers retrieved at rank @X normalized by the rank and the total number of questions"
-	print "AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)"
-	print "AC2   - the absolute number of correct answers at @X"
-	"""
+        ## """
+        ## print "%16s %6s  %14s %6s  %14s %6s  %12s %4s" % ("IR", "SYS", "IR", "SYS", "IR", "SYS", "IR", "SYS")
+        ## for i, (p_se, p_svm, a_se, a_svm, a_se1, a_svm1, a_se2, a_svm2) in enumerate(zip(prec_se, prec_svm, acc_se, acc_svm, acc_se1, acc_svm1, acc_se2, acc_svm2), 1):
+        ##         print "REC-1@%02d: %6.2f %6.2f  ACC@%02d: %6.2f %6.2f  AC1@%02d: %6.2f %6.2f  AC2@%02d: %4.0f %4.0f" %(i, p_se, p_svm, i, a_se, a_svm, i, a_se1, a_svm1, i, a_se2, a_svm2)
+        ## print
+        ## print "REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks where questions have at most one correct answer)"
+        ## print "ACC   - accuracy, i.e., number of correct answers retrieved at rank @X normalized by the rank and the total number of questions"
+        ## print "AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)"
+        ## print "AC2   - the absolute number of correct answers at @X"
+        ## """
 
 def eval_search_engine(res_fname, format, th=10):
 	ir = read_res_file(res_fname, format)		
@@ -208,15 +208,15 @@ def eval_search_engine(res_fname, format, th=10):
 
 	mrr = metrics.mrr(ir, th)
 
-	print "%13s" %"IR"
-	print "MRRof1: %5.2f" % mrr
+        print(("%13s" %"IR"))
+        print(("MRRof1: %5.2f" % mrr))
 	for i, (r, a, a1, a2) in enumerate(zip(rec, acc, acc1, acc2), 1):
-		print "REC-1@%02d: %6.2f  ACC@%02d: %6.2f  AC1@%02d: %6.2f  AC2@%02d: %4.0f" %(i, r, i, a, i, a1, i, a2)
-	print
-	print "REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks were questions have at most one correct answer)"
-	print "ACC   - accuracy, i.e. number of correct answers retrieved at rank @X normalized by the rank and the total number of questions"
-	print "AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)"
-	print "AC2   - the absolute number of correct answers at @X"
+                print(("REC-1@%02d: %6.2f  ACC@%02d: %6.2f  AC1@%02d: %6.2f  AC2@%02d: %4.0f" %(i, r, i, a, i, a1, i, a2)))
+        print()
+        print("REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks were questions have at most one correct answer)")
+        print("ACC   - accuracy, i.e. number of correct answers retrieved at rank @X normalized by the rank and the total number of questions")
+        print("AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)")
+        print("AC2   - the absolute number of correct answers at @X")
 
 
 def main():

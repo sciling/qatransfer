@@ -25,6 +25,7 @@ def get_args():
     parser.add_argument("--glove_dir", default=glove_dir)
     parser.add_argument("--glove_vec_size", default=100, type=int)
     parser.add_argument("--tokenizer", default="PTB", type=str)
+    nltk.download('punkt')
     return parser.parse_args()
 
 
@@ -80,8 +81,7 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
     word_tokenize, sent_tokenize = get_sent_tokenize()
 
     source_data = []
-    f = open(os.path.join(args.source_dir, 'WikiQA-%s.txt' % data_type), 'r')
-
+    f = open(os.path.join(args.source_dir, 'WikiQA-%s.txt' % data_type), 'r', encoding="utf-8")
     lines = (f.read()).rsplit('\n')
     for i, line in enumerate(lines):
         if line == '' : continue
