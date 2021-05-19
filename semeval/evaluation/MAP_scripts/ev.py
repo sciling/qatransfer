@@ -42,19 +42,19 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 		qid, aid, relevant, ir_score = lineReader.read_line(line_res)
 		pred_qid, pred_aid, pred_relevant, pred_score = lineReader_pred.read_line(line_pred)
 		if (qid != pred_qid) or (aid != pred_aid):
-                        print(('ERROR: ID mismatch on line ' + str(lineNo) + ':'))
-                        print(('in ' + res_fname + ' we have (' + qid + ',' + aid + '),'))
-                        print(('but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'))
+			print(('ERROR: ID mismatch on line ' + str(lineNo) + ':'))
+			print(('in ' + res_fname + ' we have (' + qid + ',' + aid + '),'))
+			print(('but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'))
 			quit()
 
 		if (relevant != 'true') and (relevant != 'false'):
-                        print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'))
-                        print('Allowed values are only "true" and "false"')
+			print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'))
+			print('Allowed values are only "true" and "false"')
 			quit()
 
 		if (pred_relevant != 'true') and (pred_relevant != 'false'):
-                        print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'))
-                        print('Allowed values are only "true" and "false"')
+			print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'))
+			print('Allowed values are only "true" and "false"')
 			quit()
 
 		ir[qid].append( (relevant, ir_score, aid) )
@@ -108,7 +108,7 @@ def find_correct_answer_position(candidates):
 
 def analyze_reranking_improvement(before, after):
 	out = {}
-        for key, rank_before in list(before.items()):
+	for key, rank_before in list(before.items()):
 		rank_after = after[key]
 		improvement = rank_before - rank_after
 		out[key] = improvement
