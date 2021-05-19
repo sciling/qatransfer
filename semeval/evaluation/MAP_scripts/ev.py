@@ -22,7 +22,7 @@ def read_res_file(res_fname, format):
 	
 	# Sort based on the search engine score (largest to smallest).
         for qid, resList in list(ir.items()):
-		ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
+			ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
 	return ir
 
 
