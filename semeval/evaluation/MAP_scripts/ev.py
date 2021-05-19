@@ -19,10 +19,10 @@ def read_res_file(res_fname, format):
 	for line_res in open(res_fname):
 		qid, aid, relevant, ir_score = lineReader.read_line(line_res)  # process the line from the res file
 		ir[qid].append( (relevant, ir_score) )
-	
+
 	# Sort based on the search engine score (largest to smallest).
-        for qid, resList in list(ir.items()):
-			ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
+	for qid, resList in list(ir.items()):
+		ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
 	return ir
 
 
@@ -181,7 +181,7 @@ def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred",
 	#print "MAP   : %5.4f %5.4f" %(map_se, map_svm)
 	#print "AvgRec: %5.4f %5.4f" %(avg_acc1_ir, avg_acc1_svm)
 	#print "MRR   : %6.2f %6.2f" %(mrr_se, mrr_svm)
-        print(("MAP   : %5.4f\tMRR   : %5.4f\tAvgRec: %5.4f" %(map_svm, mrr_svm, avg_acc1_svm)))
+	print(("MAP   : %5.4f\tMRR   : %5.4f\tAvgRec: %5.4f" %(map_svm, mrr_svm, avg_acc1_svm)))
 	#print "Acc   : %5.4f" %(acc)
 	#print "P     : %5.4f" %(p)
 	#print "R     : %5.4f" %(r)
@@ -207,9 +207,8 @@ def eval_search_engine(res_fname, format, th=10):
 	acc2 = metrics.accuracy2(ir, th)
 
 	mrr = metrics.mrr(ir, th)
-
-        print(("%13s" %"IR"))
-        print(("MRRof1: %5.2f" % mrr))
+	print(("%13s" %"IR"))
+	print(("MRRof1: %5.2f" % mrr))
 	for i, (r, a, a1, a2) in enumerate(zip(rec, acc, acc1, acc2), 1):
                 print(("REC-1@%02d: %6.2f  ACC@%02d: %6.2f  AC1@%02d: %6.2f  AC2@%02d: %4.0f" %(i, r, i, a, i, a1, i, a2)))
         print()
