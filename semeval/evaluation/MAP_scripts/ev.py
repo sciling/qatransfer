@@ -210,12 +210,12 @@ def eval_search_engine(res_fname, format, th=10):
 	print(("%13s" %"IR"))
 	print(("MRRof1: %5.2f" % mrr))
 	for i, (r, a, a1, a2) in enumerate(zip(rec, acc, acc1, acc2), 1):
-                print(("REC-1@%02d: %6.2f  ACC@%02d: %6.2f  AC1@%02d: %6.2f  AC2@%02d: %4.0f" %(i, r, i, a, i, a1, i, a2)))
-        print()
-        print("REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks were questions have at most one correct answer)")
-        print("ACC   - accuracy, i.e. number of correct answers retrieved at rank @X normalized by the rank and the total number of questions")
-        print("AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)")
-        print("AC2   - the absolute number of correct answers at @X")
+		print(("REC-1@%02d: %6.2f  ACC@%02d: %6.2f  AC1@%02d: %6.2f  AC2@%02d: %4.0f" %(i, r, i, a, i, a1, i, a2)))
+	print()
+	print("REC-1 - percentage of questions with at least 1 correct answer in the top @X positions (useful for tasks were questions have at most one correct answer)")
+	print("ACC   - accuracy, i.e. number of correct answers retrieved at rank @X normalized by the rank and the total number of questions")
+	print("AC1   - the number of correct answers at @X normalized by the number of maximum possible answers (perfect re-ranker)")
+	print("AC2   - the absolute number of correct answers at @X")
 
 
 def main():
