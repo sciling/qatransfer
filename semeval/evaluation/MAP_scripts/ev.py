@@ -5,7 +5,7 @@ import logging
 from collections import defaultdict
 from operator import itemgetter
 from optparse import OptionParser
-from res_file_reader import ResFileReader
+from .res_file_reader import ResFileReader
 import metrics
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
