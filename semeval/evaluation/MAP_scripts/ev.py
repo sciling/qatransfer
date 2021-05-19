@@ -67,7 +67,7 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 
 	# Remove questions that contain no correct answer
 	if ignore_noanswer:
-                for qid in list(ir.keys()):
+		for qid in list(ir.keys()):
 			candidates = ir[qid]
 			if all(relevant == "false" for relevant,_,_ in candidates):
 				del ir[qid]
