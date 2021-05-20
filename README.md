@@ -1,3 +1,21 @@
+## Install as package with pip
+
+This repository is a fork of the [qa-tranfer](https://github.com/shmsw25/qa-transfer) repo with some bug fixes.
+In addition, it adds a setup.py file so that it can be installed with pip:
+
+```
+  pip install "https://github.com/sciling/qatransfer/archive/refs/heads/master.zip#egg=qatransfer"
+```
+Please note that we tried not to change the structure of the original repo.
+The main purpose is to be installed in [kubeflow components](https://kubeflow-pipelines.readthedocs.io/en/latest/source/kfp.components.html#:~:text=packages_to_install).
+Thus, the package will not be installed in a clean way, i.e. there will be basic, wikiqa, semeval, etc packages after the installation.
+To install it in a kubeflow component:
+```
+func_to_container_op(your_component_function,  base_image='sciling/tensorflow:0.12.0-py3', 
+                     packages_to_install=["https://github.com/sciling/qatransfer/archive/refs/heads/master.zip#egg=qatransfer"])
+```
+
+
 ## Question Answering through Transfer Learning
 
 
