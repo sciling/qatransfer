@@ -182,6 +182,7 @@ def _test(config):
     if config.dump_eval:
         print("dumping eval ...")
         graph_handler.dump_eval(e)
+    return e
 
 
 def _forward(config):
