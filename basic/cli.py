@@ -114,7 +114,7 @@ def main(_):
 
     config.out_dir = os.path.join(config.out_base_dir, config.model_name, str(config.run_id).zfill(2))
 
-    return m(config)
+    m(config)
 
 if __name__ == "__main__":
     tf.app.run()
