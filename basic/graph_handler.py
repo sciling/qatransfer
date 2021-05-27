@@ -57,9 +57,13 @@ class GraphHandler(object):
             save_path = os.path.join(config.save_dir, "{}-{}".format(config.model_name, config.load_step))
         else:
             save_dir = config.save_dir
+            print('Save directory:')
+            print(save_dir)
             checkpoint = tf.train.get_checkpoint_state(save_dir)
             assert checkpoint is not None, "cannot load checkpoint at {}".format(save_dir)
             save_path = checkpoint.model_checkpoint_path
+            print('Save path:')
+            print(save_path)
         print("Loading saved model from {}".format(save_path))
         saver.restore(sess, save_path)
 
