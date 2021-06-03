@@ -13,6 +13,7 @@ def main():
 
 
 def get_args():
+    import nltk
     parser = argparse.ArgumentParser()
     home = os.path.expanduser("~")
     source_dir = os.path.join(home, "data", "WikiQACorpus")
@@ -97,7 +98,7 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
         dic = {'context' : sentence, 'qas' : qas}
         source_data.append({'paragraphs' : [dic]})
 
-    json.dump({'data' : source_data}, open(os.path.join(args.source_dir, '%s-class.json'%data_type), 'w'))
+    json.dump({'data' : source_data}, open(os.path.join(args.target_dir, '%s-class.json'%data_type), 'w'))
 
     q, cq, y, rx, rcx, ids, idxs = [], [], [], [], [], [], []
     cy = []
