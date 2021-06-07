@@ -182,6 +182,7 @@ def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred",
 	#print "AvgRec: %5.4f %5.4f" %(avg_acc1_ir, avg_acc1_svm)
 	#print "MRR   : %6.2f %6.2f" %(mrr_se, mrr_svm)
 	print(("MAP   : %5.4f\tMRR   : %5.4f\tAvgRec: %5.4f" %(map_svm, mrr_svm, avg_acc1_svm)))
+	return map_svm, mrr_svm, avg_acc1_svm
 	#print "Acc   : %5.4f" %(acc)
 	#print "P     : %5.4f" %(p)
 	#print "R     : %5.4f" %(r)
