@@ -16,18 +16,20 @@ def read_res_file(res_fname, format):
 	lineReader = ResFileReader(format)
 
 	ir = defaultdict(list)
-	for line_res in open(res_fname):
-		qid, aid, relevant, ir_score = lineReader.read_line(line_res)  # process the line from the res file
-		ir[qid].append( (relevant, ir_score) )
+
+    with open(res_fname) as fd:
+	    for line_res in fd:
+	    	qid, aid, relevant, ir_score = lineReader.read_line(line_res)  # process the line from the res file
+	    	ir[qid].append( (relevant, ir_score) )
 
 	# Sort based on the search engine score (largest to smallest).
 	for qid, resList in list(ir.items()):
-		ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]  
+		ir[qid] = [rel for rel, score in sorted(resList, key = itemgetter(1), reverse = True)]
 	return ir
 
 
-def read_res_pred_files(res_fname, pred_fname, format, verbose=True, 
-                        reranking_th=0.0, 
+def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
+                        reranking_th=0.0,
                         ignore_noanswer=False):
 
 	lineReader = ResFileReader(format)
@@ -36,30 +38,31 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 	ir, svm = defaultdict(list), defaultdict(list)
 	conf_matrix = {'true' : {'true' : 0, 'false' : 0}, 'false' : {'true' : 0, 'false' : 0}}
 	lineNo = 0
-	for line_res, line_pred in zip(open(res_fname), open(pred_fname)):
-		lineNo = lineNo + 1
-		# Process the line from the res file.
-		qid, aid, relevant, ir_score = lineReader.read_line(line_res)
-		pred_qid, pred_aid, pred_relevant, pred_score = lineReader_pred.read_line(line_pred)
-		if (qid != pred_qid) or (aid != pred_aid):
-			print(('ERROR: ID mismatch on line ' + str(lineNo) + ':'))
-			print(('in ' + res_fname + ' we have (' + qid + ',' + aid + '),'))
-			print(('but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'))
-			quit()
+    with open(res_fname) as rfd, open(pred_fname) as pfd:
+	    for line_res, line_pred in zip(rfd, pfd):
+	    	lineNo = lineNo + 1
+	    	# Process the line from the res file.
+	    	qid, aid, relevant, ir_score = lineReader.read_line(line_res)
+	    	pred_qid, pred_aid, pred_relevant, pred_score = lineReader_pred.read_line(line_pred)
+	    	if (qid != pred_qid) or (aid != pred_aid):
+	    		print(('ERROR: ID mismatch on line ' + str(lineNo) + ':'))
+	    		print(('in ' + res_fname + ' we have (' + qid + ',' + aid + '),'))
+	    		print(('but in ' + pred_fname + ' we have (' + pred_qid + ',' + pred_aid + ')'))
+	    		quit()
 
-		if (relevant != 'true') and (relevant != 'false'):
-			print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'))
-			print('Allowed values are only "true" and "false"')
-			quit()
+	    	if (relevant != 'true') and (relevant != 'false'):
+	    		print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + res_fname + ': "' + relevant + '"'))
+	    		print('Allowed values are only "true" and "false"')
+	    		quit()
 
-		if (pred_relevant != 'true') and (pred_relevant != 'false'):
-			print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'))
-			print('Allowed values are only "true" and "false"')
-			quit()
+	    	if (pred_relevant != 'true') and (pred_relevant != 'false'):
+	    		print(('ERROR: wrong label on line ' + str(lineNo) + ' in ' + pred_fname + ': "' + pred_relevant + '"'))
+	    		print('Allowed values are only "true" and "false"')
+	    		quit()
 
-		ir[qid].append( (relevant, ir_score, aid) )
-		svm[qid].append( (relevant, pred_score, aid) )
-		conf_matrix[relevant][pred_relevant] = conf_matrix[relevant][pred_relevant] + 1
+	    	ir[qid].append( (relevant, ir_score, aid) )
+	    	svm[qid].append( (relevant, pred_score, aid) )
+	    	conf_matrix[relevant][pred_relevant] = conf_matrix[relevant][pred_relevant] + 1
 
 	if verbose:
 		analyze_file = open(pred_fname + ".analysis", "w")
@@ -76,7 +79,7 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 	for qid in ir:
 		# Sort by IR score.
 		ir_sorted = sorted(ir[qid], key = itemgetter(1), reverse = True)
-		
+
 		# Sort by SVM prediction score.
 		svm_sorted = svm[qid]
 		max_score = max([score for rel, score, aid in svm_sorted])
@@ -92,7 +95,7 @@ def read_res_pred_files(res_fname, pred_fname, format, verbose=True,
 
 		ir[qid] = [rel for rel, score, aid in ir_sorted]
 		svm[qid] = [rel for rel, score, aid in svm_sorted]
-	
+
 	if verbose:
 		analyze_file.close()
 		info_file.close()
@@ -115,15 +118,15 @@ def analyze_reranking_improvement(before, after):
 	return out
 
 
-def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred", 
+def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred",
                   format="trec",
-                  th=10, 
+                  th=10,
                   verbose=False,
                   reranking_th=0.0,
                   ignore_noanswer=False):
-	ir, svm, conf_matrix = read_res_pred_files(res_fname, pred_fname, format, verbose, 
-		                              reranking_th=reranking_th, 
-		                              ignore_noanswer=ignore_noanswer)		
+	ir, svm, conf_matrix = read_res_pred_files(res_fname, pred_fname, format, verbose,
+		                              reranking_th=reranking_th,
+		                              ignore_noanswer=ignore_noanswer)
 	# Calculate standard P, R, F1, Acc
 	acc = 1.0 * (conf_matrix['true']['true'] + conf_matrix['false']['false']) / (conf_matrix['true']['true'] + conf_matrix['false']['false'] + conf_matrix['true']['false'] + conf_matrix['false']['true'])
 	p = 0
@@ -199,7 +202,7 @@ def eval_reranker(res_fname="svm.test.res", pred_fname="svm.train.pred",
         ## """
 
 def eval_search_engine(res_fname, format, th=10):
-	ir = read_res_file(res_fname, format)		
+	ir = read_res_file(res_fname, format)
 
 	# evaluate IR
 	rec = metrics.recall_of_1(ir, th)
@@ -221,25 +224,25 @@ def eval_search_engine(res_fname, format, th=10):
 
 def main():
 	usage = "usage: %prog [options] arg1 [arg2]"
-	desc = """arg1: file with the output of the baseline search engine (ex: svm.test.res) 
+	desc = """arg1: file with the output of the baseline search engine (ex: svm.test.res)
 	arg2: predictions file from svm (ex: train.predictions)
 	if arg2 is ommited only the search engine is evaluated"""
 
 	parser = OptionParser(usage=usage, description=desc)
-	parser.add_option("-t", "--threshold", dest="th", default=10, type=int, 
+	parser.add_option("-t", "--threshold", dest="th", default=10, type=int,
 	                  help="supply a value for computing Precision up to a given threshold "
 	                  "[default: %default]", metavar="VALUE")
-	parser.add_option("-r", "--reranking_threshold", dest="reranking_th", default=None, type=float, 
+	parser.add_option("-r", "--reranking_threshold", dest="reranking_th", default=None, type=float,
 	                  help="if maximum prediction score for a set of candidates is below this threshold, do not re-rank the candiate list."
 	                  "[default: %default]", metavar="VALUE")
-	parser.add_option("-f", "--format", dest="format", default="trec", 
-	                  help="format of the result file (trec, answerbag): [default: %default]", 
-	                  metavar="VALUE")	 	  
+	parser.add_option("-f", "--format", dest="format", default="trec",
+	                  help="format of the result file (trec, answerbag): [default: %default]",
+	                  metavar="VALUE")
 	parser.add_option("-v", "--verbose", dest="verbose", default=False, action="store_true",
-	                  help="produce verbose output [default: %default]")	 	  
+	                  help="produce verbose output [default: %default]")
 	parser.add_option("--ignore_noanswer", dest="ignore_noanswer", default=False, action="store_true",
-	                  help="ignore questions with no correct answer [default: %default]")	 	  
-	
+	                  help="ignore questions with no correct answer [default: %default]")
+
 	(options, args) = parser.parse_args()
 
 	if len(args) == 1:
@@ -247,14 +250,14 @@ def main():
 		eval_search_engine(res_fname, options.format, options.th)
 	elif len(args) == 2:
 		res_fname = args[0]
-		pred_fname = args[1]	
-		eval_reranker(res_fname, pred_fname, options.format, options.th, 
+		pred_fname = args[1]
+		eval_reranker(res_fname, pred_fname, options.format, options.th,
 		              options.verbose, options.reranking_th, options.ignore_noanswer)
 	else:
 		parser.print_help()
 		sys.exit(1)
-	
 
-if __name__ == '__main__':	
+
+if __name__ == '__main__':
 	main()
 
