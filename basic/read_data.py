@@ -101,13 +101,14 @@ class DataSet(object):
         batch_idx_tuples = itertools.chain.from_iterable(grouped() for _ in range(num_epochs))
 
         def get_shared(pos):
-            return json.load(open(self.shared_path \
-                    % (str(pos[0]).zfill(3), str(pos[1]).zfill(3)+".json"), 'r'))
+            with open(self.shared_path % (str(pos[0]).zfill(3), str(pos[1]).zfill(3) + ".json"), 'r') as fd:
+                return json.load(fd)
+
         for _ in range(num_batches):
             batch_idxs = tuple(i for i in next(batch_idx_tuples) if i is not None)
             batch_data = self.get_by_idxs(batch_idxs)
             shared_batch_data = {}
-            
+
             if self.load_shared:
                 pos = batch_data['*x']
                 shared_list = [get_shared(each) for each in pos]
@@ -171,7 +172,7 @@ def load_metadata(config, data_type):
 def read_data(config, data_type, ref, data_filter=None):
 
     data_path = os.path.join(config.data_dir, "data_{}.json".format(data_type))
-    _shared_path = config.data_dir + "/shared_" + data_type + "_%s_%s" 
+    _shared_path = config.data_dir + "/shared_" + data_type + "_%s_%s"
     with open(data_path, 'r') as fh:
         data = json.load(fh)
     #if config.load_shared:
@@ -200,7 +201,8 @@ def read_data(config, data_type, ref, data_filter=None):
     shared_path = config.shared_path or os.path.join(config.out_dir, "shared.json")
     if not (ref or config.using_shared): create_shared(config, shared, shared_path)
 
-    new_shared = json.load(open(shared_path, 'r'))
+    with open(shared_path, 'r') as fd:
+        new_shared = json.load(fd)
 
     for (k, v) in new_shared.items():
         shared[k] = v
