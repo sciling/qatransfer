@@ -39,7 +39,8 @@ def main():
 
 def load_data(args):
     data_path = os.path.join(args.data_dir, "data_%s.json" % args.eval_name)
-    return json.load(open(data_path, 'r'))
+    with open(data_path, 'r') as fd:
+        return json.load(fd)
 
 def evaluate(args, data, run_id, step, ensemble=False, ensemble_list=[], dump_gold=False):
 
