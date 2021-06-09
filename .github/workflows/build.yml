@@ -33,7 +33,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/v0.1/assets
+        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/v0.1/assets?name=qatransfer-0.1.tar.gz
         asset_path: dist/qatransfer-0.1.tar.gz
         asset_name: qatransfer-0.1.tar.gz
         asset_content_type: application/tar+gzip
