@@ -42,8 +42,10 @@ def prepro(args):
 def save(args, data, shared, data_type):
     data_path = os.path.join(args.target_dir, "data_{}.json".format(data_type))
     shared_path = os.path.join(args.target_dir, "shared_{}.json".format(data_type))
-    json.dump(data, open(data_path, 'w'))
-    json.dump(shared, open(shared_path, 'w'))
+    with open(data_path, 'w') as fd:
+        json.dump(data, fd)
+    with open(shared_path, 'w') as fd:
+        json.dump(shared, fd)
 
 
 def get_word2vec(args, word_counter):
@@ -98,7 +100,8 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
         dic = {'context' : sentence, 'qas' : qas}
         source_data.append({'paragraphs' : [dic]})
 
-    json.dump({'data' : source_data}, open(os.path.join(args.target_dir, '%s-class.json'%data_type), 'w'))
+    with open(os.path.join(args.target_dir, '%s-class.json'%data_type), 'w') as fl:
+        json.dump({'data': source_data}, fl)
 
     q, cq, y, rx, rcx, ids, idxs = [], [], [], [], [], [], []
     cy = []
@@ -182,6 +185,7 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
 
     print("saving ...")
     save(args, data, shared, out_name)
+    f.close()
 
 
 if __name__ == "__main__":
