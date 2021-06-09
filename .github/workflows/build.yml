@@ -29,5 +29,5 @@ jobs:
       run: python setup.py sdist
     - uses: actions/upload-artifact@master
       with:
-        name: dist
-        path: dist
+        name: sdist
+        path: dist/*.tar.gz
