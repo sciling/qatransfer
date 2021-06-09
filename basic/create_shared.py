@@ -30,7 +30,8 @@ def create_shared(config, shared, shared_path):
     shared['word2idx'][UNK] = 1
     shared['char2idx'][NULL] = 0
     shared['char2idx'][UNK] = 1
-    json.dump({'word2idx': shared['word2idx'], 'char2idx': shared['char2idx']}, open(shared_path, 'w'))
+    with open(shared_path, 'w') as fd:
+        json.dump({'word2idx': shared['word2idx'], 'char2idx': shared['char2idx']}, fd)
 
 def get_word2vec(word_counter):
     glove_corpus = '6B'
