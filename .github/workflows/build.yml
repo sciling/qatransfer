@@ -41,6 +41,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.geturl.outputs.upload_url }}
-        asset_path: ./dist/qatransfer-*.tar.gz
-        asset_name: qatransfer-sdist.tar.gz
+        asset_path: ./dist/qatransfer-0.1.tar.gz
+        asset_name: qatransfer-0.1.tar.gz
         asset_content_type: application/tar+gzip
