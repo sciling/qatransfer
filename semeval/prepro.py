@@ -43,7 +43,7 @@ def get_args():
 
 
 def replace_sent(sent):
-    return sent.replace("'''", '"').replace("```", '"').replace("''", '"').replace("``", '"') 
+    return sent.replace("'''", '"').replace("```", '"').replace("''", '"').replace("``", '"')
 
 def process_tokens(temp_tokens):
     tokens = []
@@ -65,7 +65,7 @@ def save(target_dir, data, shared, data_type):
 def get_word2vec(glove_dir, word_counter):
     glove_corpus = '6B'
     glove_vec_size= 100
-    
+
     glove_path = os.path.join(glove_dir, "glove.{}.{}d.txt".format(glove_corpus, glove_vec_size))
     sizes = {'6B': int(4e5), '42B': int(1.9e6), '840B': int(2.2e6), '2B': int(1.2e6)}
     total = sizes[glove_corpus]
@@ -120,7 +120,7 @@ def prepro_each(args, data_type):
         with open(os.path.join(args.source_dir, sub_dir, fileName%(data_type)), encoding="utf-8") as f:
             data_list += xmltodict.parse(f.read())['xml']['Thread']
     questions, comments, answers, question_ids, answer_ids = [], [], [], [], []
-    
+
     text2answer = {'Good':0, 'PotentiallyUseful':1, 'Bad':2}
     for data in data_list:
         q = str(data['RelQuestion']['RelQBody'])
@@ -141,8 +141,8 @@ def prepro_each(args, data_type):
     print ("start for preprocessing for %s" % (data_type))
 
     q_len, x_len = [], []
-    multi_sent = 0 
- 
+    multi_sent = 0
+
     for ai, (question, comment, answer, question_id, answer_id) in \
             tqdm(enumerate(zip(questions, comments, answers, question_ids, answer_ids))):
         qi = word_tokenize(question)
@@ -162,10 +162,9 @@ def prepro_each(args, data_type):
                     lower_word_counter[xijk.lower()] += 1
                     for xijkl in xijk:
                         char_counter[xijkl] += 1
-            json.dump({'x': xi, 'cx': cxi, 'p': story},
-                  open(os.path.join(args.target_dir,
-                        'shared_%s_%s_%s.json' \
-                        % (data_type, str(ai).zfill(3), str(pi).zfill(3))), 'w'))
+            with open(os.path.join(args.target_dir, 'shared_%s_%s_%s.json' % (data_type, str(ai).zfill(3), str(pi).zfill(3))), 'w') as fd:
+                json.dump({'x': xi, 'cx': cxi, 'p': story}, fd)
+
             def put():
                 q.append(qi)
                 cq.append(cqi)
