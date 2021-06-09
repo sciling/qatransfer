@@ -1,3 +1,5 @@
+[![build](https://github.com/sciling/qatransfer/actions/workflows/build.yml/badge.svg)](https://github.com/sciling/qatransfer/actions/workflows/build.yml)
+
 ## Install as package with pip
 
 This repository is a fork of the [qa-tranfer](https://github.com/shmsw25/qa-transfer) repo with some bug fixes.
@@ -11,7 +13,7 @@ The main purpose is to be installed in [kubeflow components](https://kubeflow-pi
 Thus, the package will not be installed in a clean way, i.e. there will be basic, wikiqa, semeval, etc packages after the installation.
 To install it in a kubeflow component:
 ```python
-func_to_container_op(your_component_function,  base_image='sciling/tensorflow:0.12.0-py3', 
+func_to_container_op(your_component_function,  base_image='sciling/tensorflow:0.12.0-py3',
                      packages_to_install=["https://github.com/sciling/qatransfer/archive/refs/heads/master.zip#egg=qatransfer"])
 ```
 
@@ -78,7 +80,7 @@ chmod +x evaluate.sh; ./evaluate.sh DATA RUN_ID START_STEP END_STEP
 - `START_STEP`: STEP+200 when you used for finetuning
 - `END_STEP`: STEP+5000
 
-This is just for a quick tutorial. Please take a look at [run.md](run.md) for details about running the code. 
+This is just for a quick tutorial. Please take a look at [run.md](run.md) for details about running the code.
 
 
 
