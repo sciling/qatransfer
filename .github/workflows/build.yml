@@ -35,5 +35,5 @@ jobs:
       with:
         upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/v0.1/assets
         asset_path: dist/qatransfer-0.1.tar.gz
-        asset_name: qatransfer-sdist.tar.gz
+        asset_name: qatransfer-0.1.tar.gz
         asset_content_type: application/tar+gzip
