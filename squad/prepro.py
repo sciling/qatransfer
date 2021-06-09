@@ -39,12 +39,15 @@ def create_all(args):
     if os.path.exists(out_path):
         return
     train_path = os.path.join(args.source_dir, "train-v1.1.json")
-    train_data = json.load(open(train_path, 'r'))
+    with open(train_path, 'r') as fd:
+        train_data = json.load(fd)
     dev_path = os.path.join(args.source_dir, "dev-v1.1.json")
-    dev_data = json.load(open(dev_path, 'r'))
+    with open(dev_path, 'r') as fd:
+        dev_data = json.load(fd)
     train_data['data'].extend(dev_data['data'])
     print("dumping all data ...")
-    json.dump(train_data, open(out_path, 'w'))
+    with open(out_path, 'w') as fd:
+        json.dump(train_data, fd)
 
 
 def prepro(args):
@@ -73,8 +76,11 @@ def save(args, data, shared, data_type):
     target_dir = args.target_dir
     data_path = os.path.join(target_dir, "data_{}.json".format(data_type))
     shared_path = os.path.join(target_dir, "shared_{}.json".format(data_type))
-    json.dump(data, open(data_path, 'w'))
-    json.dump(shared, open(shared_path, 'w'))
+    with open(data_path, 'w') as fd:
+        json.dump(data, fd)
+    with open(shared_path, 'w') as fd:
+        json.dump(shared, fd)
+
 
 def get_word2vec(args, word_counter):
     glove_path = os.path.join(args.glove_dir, "glove.{}.{}d.txt".format(args.glove_corpus, args.glove_vec_size))
@@ -117,7 +123,8 @@ def prepro_each(args, data_type, start_ratio=0.0, stop_ratio=1.0, out_name="defa
         sent_tokenize = lambda para: [para]
 
     source_path = in_path or os.path.join(args.source_dir, "{}-v1.1.json".format(data_type))
-    source_data = json.load(open(source_path, 'r'))
+    with open(source_path, 'r') as fd:
+        source_data = json.load(fd)
 
     q, cq, y, rx, rcx, ids, idxs = [], [], [], [], [], [], []
     cy = []
